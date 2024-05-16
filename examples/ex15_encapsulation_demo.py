@@ -1,12 +1,12 @@
 class Book:
     def __init__(self, **kwargs) -> None:
-        self.__title = kwargs.get('title')
-        self.__price = kwargs.get('price')
-        self.__author = kwargs.get('author')
+        self.title = kwargs.get('title')
+        self.price = kwargs.get('price')
+        self.author = kwargs.get('author')
 
     @property
     def title(self):
-        return self.__title
+        return None if self.__title is None else self.__title.title()
     
     @title.setter
     def title(self, value):
@@ -46,14 +46,14 @@ class Book:
         return f'Book(title={title}, price={self.__price}, author={author})'
     
     def print(self):
-        print(f'Title   : {self.__title}')
-        print(f'Price   : {self.__price}')
-        print(f'Author  : {self.__author}')
+        print(f'Title   : {self.title}')
+        print(f'Price   : {self.price}')
+        print(f'Author  : {self.author}')
         print()
 
 
 def main():
-    b1 = Book(title='Let us C', price=599, author='Y Kanitkar')
+    b1 = Book(title='LET US C', price=599, author='Y Kanitkar')
     print(b1)
     b1.print()  # b1 is implicitly passed as the first arg, and received into `self`
     Book.print(b1)  # print here is treated as a global function under the namespace called `Book`
@@ -62,6 +62,8 @@ def main():
     b2.title = 'Java Unleashed'  # b2.title('Java Unleashed')
     b2.author = 'John Doe'
     b2.price = 3500
+
+    b2.print()
 
     # get functions are called here
     print(f'{b2.title} is priced at Rs.{b2.price} and written by {b2.author}')

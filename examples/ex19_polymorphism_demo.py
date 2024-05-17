@@ -1,5 +1,5 @@
 import math
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 
 class GeometricShape(ABC):
@@ -7,7 +7,8 @@ class GeometricShape(ABC):
     def find_area(self) -> float:
         pass
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def shape_name(self):
         pass
 

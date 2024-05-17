@@ -1,0 +1,776 @@
+"""
+Example of a user defined function.
+A function is a callable entity, that performs some actions.
+A function can receive arguments (or aka parameters), and optionally
+return a value
+"""
+
+# print(f'inside ex02_function.py, __name__ is {__name__}')
+
+def is_even(num: int) -> bool:
+    """
+    This function returns True if the given number is disible by 2.
+    Otherwise False is returned.
+    """
+    return num % 2 == 0
+
+
+if __name__ == '__main__':
+    n1 = int(input('Enter a number: '))
+    result = 'even' if is_even(n1) else 'odd'
+
+    print(f'The input number {n1} is an {result} number.')
+class Phone:
+    def __init__(self):
+        super().__init__()  # better practice
+        print('Phone.__init__() called')
+
+    def dial(self):
+        print('dialing...')
+
+
+class MobilePhone(Phone):
+    def __init__(self):
+        super().__init__()
+        print('MobilePhone.__init__() called')
+
+    def send_sms(self):
+        print('sending sms...')
+
+
+class Camera:
+    def __init__(self):
+        super().__init__()  # better practice
+        print('Camera.__init__() called')
+
+    def take_picture(self):
+        print('smile please...')
+
+
+class SmartPhone( MobilePhone, Camera ):
+    def __init__(self):
+        super().__init__()
+        print('SmartPhone.__init__() called')
+
+    def run_app(self, app_name='music'):
+        print(f'running {app_name} app...')
+
+
+if __name__ == '__main__':
+    sp = SmartPhone()
+    sp.dial()
+    sp.send_sms()
+    sp.run_app()
+class Book:
+    def __init__(self, **kwargs) -> None:
+        self.title = kwargs.get('title')
+        self.price = kwargs.get('price')
+        self.author = kwargs.get('author')
+
+    @property
+    def title(self):
+        return None if self.__title is None else self.__title.title()
+    
+    @title.setter
+    def title(self, value):
+        if value is not None and type(value) != str:
+            raise TypeError('value must be a str')
+        
+        self.__title = value
+
+    @property
+    def price(this):
+        return this.__price
+    
+    @price.setter
+    def price(this, value):
+        if value is not None and type(value) not in (int, float):
+            raise TypeError('value must be a number')
+        
+        if value is not None and value < 0:
+            raise ValueError('value must be >= 0')
+        
+        this.__price = value
+
+    @property
+    def author(self):
+        return self.__author
+    
+    @author.setter
+    def author(self, value):
+        if value is not None and type(value) != str:
+            raise TypeError('value must be a str')
+        
+        self.__author = value
+
+    def __str__(self) -> str:
+        title = f'"{self.__title}"' if self.__title is not None else None
+        author = f'"{self.__author}"' if self.__author is not None else None
+        return f'Book(title={title}, price={self.__price}, author={author})'
+    
+    def print(self):
+        print(f'Title   : {self.title}')
+        print(f'Price   : {self.price}')
+        print(f'Author  : {self.author}')
+        print()
+
+
+def main():
+    b1 = Book(title='LET US C', price=599, author='Y Kanitkar')
+    print(b1)
+    b1.print()  # b1 is implicitly passed as the first arg, and received into `self`
+    Book.print(b1)  # print here is treated as a global function under the namespace called `Book`
+    b2 = Book()
+    # set functions are called here
+    b2.title = 'Java Unleashed'  # b2.title('Java Unleashed')
+    b2.author = 'John Doe'
+    b2.price = 3500
+
+    b2.print()
+
+    # get functions are called here
+    print(f'{b2.title} is priced at Rs.{b2.price} and written by {b2.author}')
+
+if __name__ == '__main__':
+    main()
+
+import sys
+from myutils import csv2json
+
+def main():
+    filename = sys.argv[1] if len(sys.argv) >= 2 else input('Enter CSV filename: ')
+        
+    if filename[-4:].lower() != '.csv':
+        print('You must supply a CSV file')
+        exit(1)
+
+    csv2json(filename)
+
+
+if __name__ == '__main__':
+    main()
+
+import requests
+
+
+def main():
+    search_text = input('Enter movie to search: ')
+    apikey = 'aa9e49f'
+    url = f'https://omdbapi.com/?s={search_text}&apikey={apikey}'
+    resp = requests.get(url)
+
+    if resp.status_code != 200:
+        print('something went wrong')
+        print(resp.text)
+        exit(1)
+
+    data = resp.json()
+    print(f'Total {data['totalResults']} movies found')
+    movies = data['Search']
+
+    for each_movie in movies:
+        print(each_movie['Title'])
+
+
+
+if __name__ == '__main__':
+    main()
+
+def main():
+    nums = [10, 20, 30, 40, 11, 13, 16, 17, 15, 891, 29]
+    print(f'there are {len(nums)} numbers in `nums`')
+    my_name = 'vinod kumar k'
+    print(f'there are {len(my_name)} chars in `my_name`')
+    print(nums)
+    nums.append(100)
+    print(nums)
+    nums.insert(0, 999)  # here self -> nums, index -> 0, object -> 999
+    print(nums)
+    list.insert(nums, 0, 888)  # here self -> nums, index -> 0, object -> 888
+    print(nums)
+    p = nums.pop()  # 100
+    print(f'popped value is {p}')
+    p = nums.pop(6)  # 11
+    print(f'popped value is {p}')
+    nums.remove(16)
+    print(f'after removing 16, nums is {nums}')
+
+    nums.extend(['vinod', True, 0.12])
+    nums += [99, 88, 77]
+    print(nums)
+
+
+
+if __name__ == '__main__':
+    main()
+
+import time
+from threading import Thread, current_thread
+
+
+def do_mutli_stuff(args_list):
+    for each_args in args_list:
+        tx = Thread(target=the_task, args=each_args[:-1], name=each_args[-1])
+        tx.start()
+
+
+def task1():
+    for i in range(15):
+        print(f'task 1 is being executed - {i} in the thread {current_thread().name}')
+        time.sleep(0.1)
+
+
+def task2():
+    for i in range(15):
+        print(f'another task #2 is being executed - {i} in the thread {current_thread().name}')
+        time.sleep(0.1)
+
+
+def the_task(limit, message, duration):
+    for i in range(limit):
+        print(f'{message} - {i} in the thread {current_thread().name}')
+        time.sleep(duration)
+
+
+def main():
+    print(f'start of main() in the thread {current_thread().name}')
+    # task1()
+    # task2()
+    t1 = Thread(target=task1, name="task1")
+    t2 = Thread(target=task2, name="task2")
+
+    args_list = [(10, 'this is the customizable task', 0.25, 'task4'),
+                 (10, 'this is the 2nd task being customized', 0.15, 'task5')]
+    do_mutli_stuff(args_list)
+    #  target(*args)
+    #  the_task(10, 'this is the customizable task', 0.25)
+
+    t1.start()
+    t2.start()
+    # t3.start()
+    print(f'end of main() in the thread {current_thread().name}')
+
+
+if __name__ == '__main__':
+    main()
+import threading
+import time
+
+
+def the_task(limit, the_sums):
+    total = 0
+    for i in range(limit):
+        time.sleep(0.01)
+        total += i
+
+    print('appending the total', total)
+    the_sums.append(total)
+
+
+def main():
+    the_sums = []
+    print('start of main()')
+
+    t1 = threading.Thread(target=the_task, args=(10, the_sums))
+    t2 = threading.Thread(target=the_task, args=(15, the_sums))
+
+    t1.start()
+    t2.start()
+
+    t1.join()
+    t2.join()
+    print(the_sums)
+    print('end of main()')
+
+
+if __name__ == '__main__':
+    main()
+
+import math
+from abc import ABC, abstractmethod
+
+
+class GeometricShape(ABC):
+    @abstractmethod
+    def find_area(self) -> float:
+        pass
+
+    @property
+    @abstractmethod
+    def shape_name(self):
+        pass
+
+
+class Circle(GeometricShape):
+    def __init__(self, radius=0.0):
+        super().__init__()  # good practice
+        self.radius = radius
+
+    def find_area(self) -> float:
+        return math.pi * self.radius * self.radius
+
+    @property
+    def shape_name(self):
+        return "circle"
+
+
+class Triangle(GeometricShape):
+    def __init__(self, base=0.0, height=0.0):
+        super().__init__()
+        self.base = base
+        self.height = height
+
+    def find_area(self) -> float:
+        return 0.5 * self.base * self.height
+
+    @property
+    def shape_name(self):
+        return "triangle"
+
+
+# polymorphic method
+def process_shape(shape: GeometricShape):
+    if not isinstance(shape, GeometricShape):
+        raise TypeError('expecting GeometricShape object, but got a different one')
+
+    # todo: process the shape
+    area = shape.find_area()
+    print(f'area of the given {shape.shape_name} is {area}')
+
+
+if __name__ == '__main__':
+    c1 = Circle(23.45)
+    t1 = Triangle(23, 45)
+
+    process_shape(c1)
+    process_shape(t1)
+"""
+console-io
+
+This is an example of accepting user inputs, perofming some actions and printing the result
+"""
+
+num1 = input('Enter a number: ')
+n2 = input('Enter another number: ')
+
+num1 = int(num1)  # here int() is a constructor call
+n2 = int(n2)
+
+print('n1 + n2 =', num1 + n2)
+print(f'{num1 + n2 = }')
+"""
+This script is supposed to accept a number,
+if it is even, divide by 2 and print the result
+if it is odd, add 1 and then divide by 2 and print the result 
+"""
+
+# print(f'inside ex03_half_the_input.py, __name__ is {__name__}')
+
+
+from ex02_function import is_even
+# import ex02_function
+
+def main():
+    n1 = int(input('Enter a number for finding the half: '))
+
+    result = None
+    if is_even(n1):
+        result = n1/2
+    else:
+        result = (n1+1)/2
+
+    print(f'{result = }')
+
+
+if __name__ == '__main__':
+    main()
+"""
+Supposed to read content from each file with a specific extension of a directory and store the same in to a common file
+"""
+from threading import Thread
+import os
+
+
+def accumulate_files(fp, file_name, ext='.txt'):
+    if file_name[-len(ext):] != ext:
+        return
+    with open(file_name) as f:
+        fp.write(f.read())
+    print(f'finished writing content of {file_name}')
+
+
+def main():
+    with open('all_file_content.txt', 'wt') as out_file:
+        threads = []
+        for each_entry in os.listdir():
+            # accumulate_files(out_file, each_entry, '.py')
+            t1 = Thread(target=accumulate_files, args=(out_file, each_entry, '.py'))
+            threads.append(t1)
+            t1.start()
+
+        [t.join() for t in threads]
+    # at this time out_file is already closed
+
+
+if __name__ == '__main__':
+    main()
+
+import sys
+from myutils import is_float
+
+def main():
+    args = sys.argv[1:]  # ingore the first one
+    s = sum([float(a) for a in args if is_float(a)])
+    print(s)
+
+if __name__ == '__main__':
+    main()
+
+def factorial(num: int) -> int:
+    if type(num) != int:
+        raise TypeError(f'expecting class <int>, but got {type(num)}')
+
+    if num <= 1:
+        return 1
+
+    f = 1
+    while num > 1:
+        f *= num
+        num -= 1
+    return f
+
+
+def print_table(num: int) -> None:
+    if type(num) != int:
+        print(f'Can\'t print table for this - {num}')
+        return
+    
+    for i in range(1, 21):
+        print(f'{num} X {i} = {num*i}')
+
+
+def dir2(obj):
+    return [each_attr for each_attr in dir(obj) if not each_attr.startswith('_')]
+
+
+def is_float(s: str) -> bool:
+    try:
+        float(s)
+        return True
+    except:
+        return False
+    
+
+def csv2json(filename: str) -> None:
+    to_list = lambda line : [int(value) if value.isnumeric() else value for value in line.strip().split(',')]
+    try:
+        with open(filename) as file:
+            fields = file.readline().strip().split(',')
+            customers = [ dict(zip(fields, to_list(line))) for line in file]
+            
+        import json  # not a good practice; but doable
+        from time import time
+        out_filename = f'{filename[:-4]}-{time()}.json'
+        with open(out_filename, 'wt') as out_file:
+            json.dump(customers, out_file, indent=4)
+            print(f'{filename} is now converted to JSON and stored in{out_filename}')
+
+
+    except OSError as err:
+        print(err)
+
+def fibo(limit = 100):
+    print('start of fibo()')
+    a, b = -1, 1
+    for _ in range(limit):
+        c = a + b
+        yield c
+        a, b = b, c
+    
+
+
+def main():
+    print(f'type of fibo is {type(fibo)}')
+    f = fibo(10)
+    print(f'type of f is {type(f)}')
+    for i in f:  # same as i = next(f) in a loop, until the generator is done with
+        print(i)
+
+
+
+if __name__ == '__main__':
+    main()
+
+def main():
+    nums = [10, 20, 30, 40, 11, 13, 16, 17, 15, 891, 29]
+    print(nums[5])  # 6th element --> 13
+    # print(nums[1000]) # IndexError
+    print(nums[-1])  # last element
+    n = 888
+    if n in nums:
+        idx = nums.index(n)
+        print(idx)
+
+    print(nums[3:7])  # from index 3 to index 6
+    print(nums[3:])  # from index 3 
+    print(nums[:7])  # upto index 6
+
+    print(nums[3:7:1])  # from index 3 to index 6
+    print(nums[::2])  
+    print(nums[1::2]) 
+
+    print(nums[::-1])
+
+
+
+if __name__ == '__main__':
+    main()
+
+from myutils import *
+
+
+def main1():
+    n = int(input('Enter a number: '))
+    f = factorial(n)
+    print(f'{f = }')
+
+
+def main():
+    n = int(input('Enter a number: '))
+    print_table(n)
+
+
+if __name__ == '__main__':
+    main()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              FILENAME = './ex01_console_io.py'
+
+
+def file_read_method1():
+    file = None
+    
+    try:
+        file = open(FILENAME)
+        content = file.read()
+        print(content)
+    except Exception as err:
+        print('Something went wrong!')
+        print(err)
+    finally:   
+        if file is not None and not file.closed:
+            print('closing the file...')
+            file.close()
+
+
+def file_read_method2():
+    # context manager; automatically closes the resource in question
+    with open(FILENAME) as file:  #  file = open(FILENAME)
+        line_num = 1
+        while True:
+            line = file.readline()
+            if line == '': 
+                break
+            print(f'{line_num:<4}: {line}', end='')
+            line_num += 1
+        # here file.close() is going to be called
+
+
+def file_read_method3():
+    # context manager; automatically closes the resource in question
+    with open(FILENAME) as file:  #  file = open(FILENAME)
+        line_num = 1
+        for line in file:
+            print(f'{line_num:<4}: {line}', end='')
+            line_num += 1
+        # here file.close() is going to be called
+
+
+def main():
+    file_read_method3()
+    print()
+
+if __name__ == '__main__':
+    main()
+
+class Person:  # class Person(object):
+    def __init__(self, **kwargs) -> None:
+        self.name = kwargs.get('name')
+        self.email = kwargs.get('email')
+
+    def print(self):
+        print(f'Name   : {self.name}')
+        print(f'Email  : {self.email}')
+
+
+class Student(Person):
+    def __init__(self, **kwargs) -> None:
+        # Person.__init__(self, **kwargs)
+        super().__init__(**kwargs)
+        self.rollno = kwargs.get('rollno')
+        self.gpa = kwargs.get('gpa')
+
+    def print(self):
+        print(f'Roll#  : {self.rollno}')
+        # Person.print(self)
+        super().print()
+        print(f'GPA    : {self.gpa}')
+        
+
+class Employee(Person):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.empno = kwargs.get('empno')
+        self.salary = kwargs.get('salary')
+
+    def print(self):
+        print(f'Emp#   : {self.empno}')
+        super().print()
+        print(f'Salary : {self.salary}')
+
+
+def main():
+    s1 = Student(name='Kishore', email='kishore@xmpl.com', rollno=9181, gpa=4.9)
+    s1.print()
+    print()
+
+    e1 = Employee(empno=1234, salary=45000, name='Kiran', email='kiran@xmpl.com')
+    e1.print()
+    
+
+if __name__ == '__main__':
+    main()
+class Employee:
+    def __init__(self, empno=None, name=None, salary=None) -> None:
+        self.empno = empno
+        self.name = name
+        self.salary = salary
+
+    def print(self):
+        print(f'ID      : {self.empno}')
+        print(f'Name    : {self.name}')
+        print(f'Salary  : Rs. {self.salary}')
+        print()
+
+    def __iadd__(self, value):
+        if type(value) == str:
+            self.name += value
+        elif type(value) in (int, float):
+            self.salary += value
+        
+        return self
+    
+    def __gt__(self, value):
+        if value is not None and type(value) in (int, float):
+            return self.salary > value
+        if value is not None and type(value) is Employee:
+            return self.salary > value.salary
+        
+        raise ValueError('Invalid value supplied. Please try with number or Employee object')
+
+
+def main():
+    e1 = Employee(1122, 'Rajesh', 45000)
+    e2 = Employee(6271, 'Umesh', 55000)
+
+    e1 += ' Kumar'  # expectation --> RHS should be concatenated to e1.name
+    e2 += 2500  # expectation --> RHS should be added to the salary
+
+    e1.print()
+    e2.print()
+
+    if e1 > e2:  # if e2 < e1:
+        print(f'{e1.name} earns more than {e2.name}')
+    else:
+        print(f'{e1.name} does not earn more than {e2.name}')
+
+    e1.f1(10, 20)
+
+
+
+if __name__ == '__main__':
+    main()
+
+def main():
+    nums = [10, 20, 30, 40, 11, 13, 16, 17, 15, 891, 29]
+
+    # even_nums = []
+    # for each_num in nums:
+    #     if each_num % 2 == 0:
+    #         even_nums.append(each_num)
+
+    even_nums = [n for n in nums if n%2==0]
+    odd_nums = [n for n in nums if n%2]
+
+    print(nums)
+    print(even_nums)
+    print(odd_nums)
+
+    names = ["vinod", "SHYAM", "John", 123, False, "Jane", "MILLER", "Robert"]
+    # codes = []
+    # for name in names:
+    #     codes.append(name[:3].upper())
+
+    codes = [n[:3].upper() for n in names if type(n) == str]
+    rev_names = [n[::-1] if type(n) == str else n for n in names ]
+    
+    print(names)
+    print(codes)
+    print(rev_names)
+
+
+if __name__ == '__main__':
+    main()
+
+class A:
+    def f1(self):
+        print('A.f1() called')
+
+
+class B(A):
+    def f1(self):
+        print('B.f1() called')
+
+
+class C(A):
+    def f1(self):
+        print('C.f1() called')
+
+
+class D(B, C):
+    def f1(self):
+        print('D.f1() called')
+
+
+if __name__ == '__main__':
+    d1 = D()
+    d1.f1()
+    print(D.mro())
+    C.f1(d1)
+    A.f1(d1)
+class Book:
+    """
+    class Book
+    Reprents all the data and behaviours of a book object
+    """
+    
+    def __init__(self):
+        # self is the reference of the newly constructed object, passed by Python RT
+        print(f'Book.__init__() called with self as {self}')
+        self.title = 'let us c'
+        self.price = 599
+        self.author = 'Y Kanitkar'
+
+
+def main():
+    b1 = Book()
+    b1.publisher = 'BPB Publication'
+    b1.price = -888
+
+    print(f'b1 is {b1}')
+    print(f'attributes in b1 are: {dir(b1)}')
+    print(f'type(b1) is {type(b1)}')
+    print(f'type(Book) is {type(Book)}')
+
+
+if __name__ == '__main__':
+    main()
+

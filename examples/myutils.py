@@ -1,6 +1,7 @@
 def factorial(num: int) -> int:
     if type(num) != int:
         raise TypeError(f'expecting class <int>, but got {type(num)}')
+        # return None
 
     if num <= 1:
         return 1
